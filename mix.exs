@@ -21,6 +21,7 @@ defmodule NewsApi.Mixfile do
 
   defp deps do
     [
+      {:ex_doc, ">= 0.0.0", only: :dev},
       {:httpoison, "~> 1.0"},
       {:poison, "~> 3.1"}
     ]
