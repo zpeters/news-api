@@ -4,7 +4,7 @@
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
+The package can be installed
 by adding `news_api` to your list of dependencies in `mix.exs`:
 
 ```elixir
@@ -14,8 +14,26 @@ def deps do
   ]
 end
 ```
+## Configuration
+Get your API key at https://newsapi.org/.
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/news_api](https://hexdocs.pm/news_api).
+In your ```config.exs```:
+
+```
+config :news_api, api_key: "YOUR_API_KEY"
+```
+
+## Usage
+
+Get headlines by passing 2-letter ISO 3166-1 code of the country.
+
+```elixir
+NewsApi.get("ph")
+```
+
+Get headlines by category:
+
+```elixir
+NewsApi.get_by_category("ph", "business")
+```
 
