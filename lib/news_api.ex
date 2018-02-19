@@ -7,16 +7,21 @@ defmodule NewsApi do
   
   @spec get(String.t()) :: map()
   def get(country) do
-    result = call_api("#{@base_url}top-headlines?country=#{country}", headers())
-    match_result(result)
+    result("#{@base_url}top-headlines?country=#{country}")
   end
   
-  @spec get(String.t(), String.t()) :: map()
-  def get(country, category) do
-    result = call_api("#{@base_url}top-headlines?country=#{country}&category=#{category}", headers())
-    match_result(result)
+  @spec get_by_category(String.t(), String.t()) :: map()
+  def get_by_category(country, category) do
+    result("#{@base_url}top-headlines?country=#{country}&category=#{category}")
   end
-  
+
+  @spec result(String.t()) :: map()
+  defp result(url) do
+    url
+    |> call_api(headers())
+    |> match_result()
+  end
+
   @spec headers :: list()
   defp headers do
     api_key = Application.get_env(:news_api, :api_key)
