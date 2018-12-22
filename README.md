@@ -17,11 +17,15 @@ end
 ## Configuration
 Get your API key at https://newsapi.org/.
 
-In your ```config.exs```:
+In your ```dev.secret.exs```, ```prod.secret.exs``` , ```test.secret.exs```:
 
 ```
 config :news_api, api_key: "YOUR_API_KEY"
 ```
+
+or
+
+set the `NA_PRIVATEKEY` environment variable
 
 ## Usage
 

@@ -4,14 +4,15 @@ defmodule NewsApi do
   """
 
   @base_url "https://newsapi.org/v2/"
-  
+  @country Application.get_env(:news_api, :country)
+
   @spec get(String.t()) :: map()
-  def get(country) do
+  def get(country \\ @country) do
     result("#{@base_url}top-headlines?country=#{country}")
   end
-  
+
   @spec get_by_category(String.t(), String.t()) :: map()
-  def get_by_category(country, category) do
+  def get_by_category(category, country \\ @country) do
     result("#{@base_url}top-headlines?country=#{country}&category=#{category}")
   end
 
@@ -30,9 +31,9 @@ defmodule NewsApi do
 
   @spec call_api(String.t(), list) :: String.t()
   defp call_api(url, headers) do
-    HTTPoison.get!(url, headers) 
+    HTTPoison.get!(url, headers)
   end
-  
+
   @spec match_result(struct()) :: map()
   defp match_result(result) do
     case result do
