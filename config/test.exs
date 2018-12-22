@@ -1,5 +1,8 @@
 use Mix.Config
 
+config :logger,
+  level: :warn
+
 # if secret exists use that, otherwise
 # use env variables
 if File.exists?("config/test.secret.exs") do

@@ -1,9 +1,11 @@
-defmodule NewsApi do
+defmodule NewsApi.Api do
   @moduledoc """
-  Module for news api operations
+  API communication
   """
 
-  alias NewsApi.{Api}
+  require Logger
+
+  @base_url "https://newsapi.org/v2/"
 
   @doc """
   Paramters:
@@ -14,8 +16,20 @@ defmodule NewsApi do
   - `pageSize` - number of results to return.  Default 20, 100 maximum
   - `page` - page to retrieve
   """
-  def top_headlines(parameters) do
-    Api.get_top_headlines(parameters)
+  def get_top_headlines(parameters) do
+    cond do
+      Keyword.keys(parameters) == [] ->
+        {:error, :invalid_parameters, "Need one of: sources, q, language, country, category"}
+
+      Keyword.has_key?(parameters, :country) and Keyword.has_key?(parameters, :sources) ->
+        {:error, :invalid_parameters, "Cannot specify 'country' and 'sources'"}
+
+      Keyword.has_key?(parameters, :category) and Keyword.has_key?(parameters, :sources) ->
+        {:error, :invalid_parameters, "Cannot specify 'category' and 'sources'"}
+
+      true ->
+        get("/top-headlines", parameters)
+    end
   end
 
   @doc """
@@ -24,8 +38,8 @@ defmodule NewsApi do
   - `category` - one of _business_, _entertainment_, _general_, _health_, _science_, _sports_, _technology_.  Cannot be used with `sources`
   - `language` - Possible options: ar de en es fr he it nl no pt ru se ud zh
   """
-  def get_sources(parameters) do
-    Api.get_sources(parameters)
+  def get_sources(parameters \\ []) do
+    get("/sources", parameters)
   end
 
   @doc """
@@ -45,7 +59,51 @@ defmodule NewsApi do
   - pageSize - The number of results to return per page. 20 is the default, 100 is the maximum.
   - page - Use this to page through the results.
   """
-  def everything(parameters) do
-    Api.get_everything(parameters)
+  def get_everything(parameters) do
+    get("/everything", parameters)
+  end
+
+  @spec get(String.t(), list()) :: map()
+  defp get(path, parameters) do
+    url = "#{@base_url}#{path}"
+
+    result =
+      url
+      |> call_api(headers(), parameters)
+      |> match_result()
+
+    {:ok, result}
+  rescue
+    err ->
+      {:error, :get_failed, err}
+  end
+
+  @spec headers :: list()
+  defp headers do
+    api_key = Application.get_env(:news_api, :api_key)
+    [Authorization: "Bearer #{api_key}", Accept: "Application/json"]
+  end
+
+  @spec call_api(String.t(), list, list) :: String.t()
+  defp call_api(url, headers, parameters) do
+    Logger.debug(fn -> "#{inspect(url)}" end)
+    Logger.debug(fn -> "#{inspect(parameters)}" end)
+    HTTPoison.get!(url, headers, params: parameters)
+  end
+
+  @spec match_result(struct()) :: map()
+  defp match_result(result) do
+    case result do
+      %{status_code: 200, body: body} ->
+        decode_result(body)
+
+      %{status_code: 401} ->
+        %{message: "API key is missing"}
+    end
+  end
+
+  @spec decode_result(String.t()) :: map()
+  defp decode_result(result) do
+    Poison.decode!(result)
   end
 end

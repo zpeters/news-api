@@ -7,7 +7,7 @@ defmodule NewsApi.Mixfile do
       version: "0.1.0",
       elixir: "~> 1.5",
       description: "API Wrapper for News API",
-      start_permanent: Mix.env == :prod,
+      start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package()
     ]
@@ -23,10 +23,10 @@ defmodule NewsApi.Mixfile do
     [
       {:httpoison, "~> 1.0"},
       {:poison, "~> 3.1"},
-      {:ex_doc, "~> 0.16", only: :dev, runtime: false} 
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false}
     ]
   end
-  
+
   defp package do
     [
       maintainers: ["radvc"],
