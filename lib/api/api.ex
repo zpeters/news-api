@@ -104,6 +104,6 @@ defmodule NewsApi.Api do
 
   @spec decode_result(String.t()) :: map()
   defp decode_result(result) do
-    Poison.decode!(result)
+    Jason.decode!(result)
   end
 end
