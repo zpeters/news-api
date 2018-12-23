@@ -42,7 +42,7 @@ defmodule NewsApiApiTest do
       sources = resp["sources"]
 
       assert resp["status"] == "ok"
-      assert length(sources) == 0
+      assert Enum.empty?(sources)
     end
 
     test "invalid language" do
@@ -50,7 +50,7 @@ defmodule NewsApiApiTest do
       sources = resp["sources"]
 
       assert resp["status"] == "ok"
-      assert length(sources) == 0
+      assert Enum.empty?(sources)
     end
 
     test "invalid country" do
@@ -58,7 +58,7 @@ defmodule NewsApiApiTest do
       sources = resp["sources"]
 
       assert resp["status"] == "ok"
-      assert length(sources) == 0
+      assert Enum.empty?(sources)
     end
 
     test "invalid parameters" do

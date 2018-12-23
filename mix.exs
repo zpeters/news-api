@@ -23,7 +23,8 @@ defmodule NewsApi.Mixfile do
     [
       {:httpoison, "~> 1.0"},
       {:poison, "~> 3.1"},
-      {:ex_doc, "~> 0.16", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false},
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false}
     ]
   end
 
