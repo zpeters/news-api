@@ -21,9 +21,9 @@ defmodule NewsApi.Mixfile do
 
   defp deps do
     [
-      {:httpoison, "~> 1.0"},
-      {:poison, "~> 3.1"},
-      {:ex_doc, "~> 0.16", only: :dev, runtime: false},
+      {:httpoison, "~> 1.5.0"},
+      {:poison, "~> 4.0.1"},
+      {:ex_doc, "~> 0.19.2", only: :dev, runtime: false},
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false}
     ]
   end
